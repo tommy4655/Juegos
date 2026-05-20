@@ -16,55 +16,36 @@
     const { useState, useEffect } = React;
 
     const ANIME_LIST = [
-      { name: "Attack on Titan", img: "https://i.imgur.com/2k7YXnJ.jpg" },
-      { name: "Naruto", img: "https://i.imgur.com/9KpqX1A.jpg" },
-      { name: "One Piece", img: "https://i.imgur.com/LyGJY4s.jpg" },
-      { name: "Demon Slayer", img: "https://i.imgur.com/8Q1zW7v.jpg" },
-      { name: "Jujutsu Kaisen", img: "https://i.imgur.com/3kR1vZy.jpg" },
-      { name: "Dragon Ball Z", img: "https://i.imgur.com/6F3zB2v.jpg" },
-      { name: "Death Note", img: "https://i.imgur.com/5K2vQwF.jpg" },
-      { name: "Fullmetal Alchemist", img: "https://i.imgur.com/7L9pXqR.jpg" },
-      { name: "Bleach", img: "https://i.imgur.com/4M8nWqT.jpg" },
-      { name: "Hunter x Hunter", img: "https://i.imgur.com/1B5cYpL.jpg" },
-      { name: "My Hero Academia", img: "https://i.imgur.com/9W2zXqM.jpg" },
-      { name: "Spy x Family", img: "https://i.imgur.com/3F7vQpN.jpg" },
-      { name: "Chainsaw Man", img: "https://i.imgur.com/8K4mWqP.jpg" },
-      { name: "Tokyo Ghoul", img: "https://i.imgur.com/6L9pXqR.jpg" },
-      { name: "One Punch Man", img: "https://i.imgur.com/2F5cYpL.jpg" },
-      { name: "Black Clover", img: "https://i.imgur.com/7M8nWqT.jpg" },
-      { name: "Fairy Tail", img: "https://i.imgur.com/4K2vQwF.jpg" },
-      { name: "Haikyuu", img: "https://i.imgur.com/9L9pXqR.jpg" },
-      { name: "Slam Dunk", img: "https://i.imgur.com/1B5cYpL.jpg" },
-      { name: "Blue Lock", img: "https://i.imgur.com/5W2zXqM.jpg" },
-      { name: "Detective Conan", img: "https://i.imgur.com/3F7vQpN.jpg" },
-      { name: "Inuyasha", img: "https://i.imgur.com/8K4mWqP.jpg" },
-      { name: "Yu Yu Hakusho", img: "https://i.imgur.com/6L9pXqR.jpg" },
-      { name: "Sailor Moon", img: "https://i.imgur.com/2F5cYpL.jpg" },
-      { name: "Evangelion", img: "https://i.imgur.com/7M8nWqT.jpg" },
-      { name: "Cowboy Bebop", img: "https://i.imgur.com/4K2vQwF.jpg" },
-      { name: "Code Geass", img: "https://i.imgur.com/9L9pXqR.jpg" },
-      { name: "Steins Gate", img: "https://i.imgur.com/1B5cYpL.jpg" },
-      { name: "Erased", img: "https://i.imgur.com/5W2zXqM.jpg" },
-      { name: "Violet Evergarden", img: "https://i.imgur.com/3F7vQpN.jpg" },
-      { name: "A Silent Voice", img: "https://i.imgur.com/8K4mWqP.jpg" },
-      { name: "Your Name", img: "https://i.imgur.com/6L9pXqR.jpg" },
-      { name: "Spirited Away", img: "https://i.imgur.com/2F5cYpL.jpg" },
-      { name: "Princess Mononoke", img: "https://i.imgur.com/7M8nWqT.jpg" },
-      { name: "Totoro", img: "https://i.imgur.com/4K2vQwF.jpg" },
-      { name: "Howl's Moving Castle", img: "https://i.imgur.com/9L9pXqR.jpg" },
-      { name: "Demon Slayer Movie", img: "https://i.imgur.com/1B5cYpL.jpg" },
-      { name: "Jujutsu Kaisen 0", img: "https://i.imgur.com/5W2zXqM.jpg" },
-      { name: "Dragon Ball Super", img: "https://i.imgur.com/3F7vQpN.jpg" },
-      { name: "Boruto", img: "https://i.imgur.com/8K4mWqP.jpg" },
-      { name: "Black Butler", img: "https://i.imgur.com/6L9pXqR.jpg" },
-      { name: "Fate Zero", img: "https://i.imgur.com/2F5cYpL.jpg" },
-      { name: "Parasyte", img: "https://i.imgur.com/7M8nWqT.jpg" },
-      { name: "Berserk", img: "https://i.imgur.com/4K2vQwF.jpg" },
-      { name: "Vinland Saga", img: "https://i.imgur.com/9L9pXqR.jpg" },
-      { name: "Monster", img: "https://i.imgur.com/1B5cYpL.jpg" },
-      { name: "Pluto", img: "https://i.imgur.com/5W2zXqM.jpg" },
-      { name: "Hell's Paradise", img: "https://i.imgur.com/3F7vQpN.jpg" },
-      { name: "Hell Girl", img: "https://i.imgur.com/8K4mWqP.jpg" }
+      { name: "Attack on Titan", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx16498-9jU7COZ2v0Lo.jpg" },
+      { name: "Naruto", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx20-KJniGdnKbP1q.jpg" },
+      { name: "One Piece", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-PUUmEhGpKHym.jpg" },
+      { name: "Demon Slayer", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx101922-HshLEhzmIpLu.jpg" },
+      { name: "Jujutsu Kaisen", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx113415-9wZxQ9hwWv4N.jpg" },
+      { name: "Dragon Ball Z", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx8133-4qScW9AxKfHn.jpg" },
+      { name: "Death Note", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx1535-ItqlTimd87aR.jpg" },
+      { name: "Fullmetal Alchemist", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx5114-HMspD8BzbHZO.jpg" },
+      { name: "Bleach", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx269-WUy9cSqb4DQX.jpg" },
+      { name: "Hunter x Hunter", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx11061-tGbxh8JURVys.jpg" },
+      { name: "My Hero Academia", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21459-iAoJsIWFS5vC.jpg" },
+      { name: "Spy x Family", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx130003-d1Fb7QKY2IBq.jpg" },
+      { name: "Chainsaw Man", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx127230-8F2gTxokYKTp.jpg" },
+      { name: "Tokyo Ghoul", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx20665-Ym6GhwLEZLtL.jpg" },
+      { name: "One Punch Man", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21087-WIlmRJ3WV3xM.jpg" },
+      { name: "Black Clover", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx100866-HCJtd3YfuOpE.jpg" },
+      { name: "Fairy Tail", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx4224-CGuKoDPAOT4x.jpg" },
+      { name: "Haikyuu", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx20039-xTVHETFBsGFd.jpg" },
+      { name: "Slam Dunk", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx294-HBYdVEf06ANF.jpg" },
+      { name: "Blue Lock", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx137491-GyPDcNjD88XP.jpg" },
+      { name: "Detective Conan", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx201-yHIxgEFWDVZ9.jpg" },
+      { name: "Inuyasha", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx263-6uJSe0duJCOK.jpg" },
+      { name: "Yu Yu Hakusho", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx312-7TFjJJcYQNQc.jpg" },
+      { name: "Sailor Moon", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx264-hD2PwfnYunB3.jpg" },
+      { name: "Evangelion", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx30-ULpTYRWLFtja.jpg" },
+      { name: "Cowboy Bebop", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx1-93aEShIfrJXV.jpg" },
+      { name: "Code Geass", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx1575-0xL7TMUqxvLe.jpg" },
+      { name: "Steins Gate", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx9253-ONrDCHx16nx5.jpg" },
+      { name: "Erased", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21071-PaL1MWp7sDfA.jpg" },
+      { name: "Violet Evergarden", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx100449-dpNZa3b21UDg.jpg" }
     ];
 
     function App() {
@@ -102,13 +83,13 @@
           ? `AnimeKiller ${attempts.length}/6 🔥` 
           : `AnimeKiller X/6 😭`;
         
+        const text = `${result}\nJuega aquí: ${window.location.href}`;
+        
         if (navigator.share) {
-          navigator.share({
-            text: `${result}\nJuega aquí: ${window.location.href}`
-          });
+          navigator.share({ text });
         } else {
-          navigator.clipboard.writeText(`${result}\nJuega aquí: ${window.location.href}`);
-          alert("Resultado copiado al portapeles");
+          navigator.clipboard.writeText(text);
+          alert("Resultado copiado. Pégalo en WhatsApp");
         }
       };
 
@@ -119,12 +100,13 @@
           <h1 className="text-4xl font-bold mb-2 text-purple-400">AnimeKiller</h1>
           <p className="text-gray-400 mb-6">Adivina el anime en 6 intentos</p>
 
-          <div className="w-64 h-64 mb-6 rounded-lg overflow-hidden">
+          <div className="w-64 h-64 mb-6 rounded-lg overflow-hidden bg-gray-800">
             <img
               src={todayAnime.img}
               style={{ filter: `blur(${blurLevel}px)` }}
               className="w-full h-full object-cover transition-all duration-500"
               alt="Adivina"
+              onError={(e) => e.target.style.display='none'}
             />
           </div>
 
