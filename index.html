@@ -3,144 +3,107 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AnimeKiller</title>
+  <title>Respira conmigo</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-</head>
-<body class="bg-[#0f0f13] text-white">
-  <div id="root"></div>
-
-  <script type="text/babel">
-    const ANIME_LIST = [
-      { name: "Attack on Titan", img: "https://media.kitsu.io/anime/poster_images/11617/original.jpg" },
-      { name: "Naruto", img: "https://media.kitsu.io/anime/poster_images/11/original.jpg" },
-      { name: "One Piece", img: "https://media.kitsu.io/anime/poster_images/12/original.jpg" },
-      { name: "Demon Slayer", img: "https://media.kitsu.io/anime/poster_images/11670/original.jpg" },
-      { name: "Jujutsu Kaisen", img: "https://media.kitsu.io/anime/poster_images/11748/original.jpg" },
-      { name: "Blue Lock", img: "https://media.kitsu.io/anime/poster_images/13251/original.jpg" },
-      { name: "Death Note", img: "https://media.kitsu.io/anime/poster_images/14/original.jpg" },
-      { name: "Fullmetal Alchemist", img: "https://media.kitsu.io/anime/poster_images/17/original.jpg" },
-      { name: "Spy x Family", img: "https://media.kitsu.io/anime/poster_images/12948/original.jpg" },
-      { name: "Chainsaw Man", img: "https://media.kitsu.io/anime/poster_images/13105/original.jpg" }
-    ];
-
-    function App() {
-      const [todayAnime, setTodayAnime] = React.useState(null);
-      const [guess, setGuess] = React.useState("");
-      const [attempts, setAttempts] = React.useState([]);
-      const [blurLevel, setBlurLevel] = React.useState(16);
-      const [gameOver, setGameOver] = React.useState(false);
-      const [imgError, setImgError] = React.useState(false);
-
-      React.useEffect(() => {
-        const day = new Date().getDate();
-        setTodayAnime(ANIME_LIST[day % ANIME_LIST.length]);
-      }, []);
-
-      const handleGuess = () => {
-        if (!guess || gameOver) return;
-        const correct = guess.toLowerCase().trim() === todayAnime.name.toLowerCase();
-        const newAttempts = [...attempts, { guess, correct }];
-        setAttempts(newAttempts);
-
-        if (correct) {
-          setGameOver(true);
-          setBlurLevel(0);
-        } else if (newAttempts.length >= 6) {
-          setGameOver(true);
-          setBlurLevel(0);
-        } else {
-          setBlurLevel(Math.max(4, blurLevel - 3));
-        }
-        setGuess("");
-      };
-
-      const shareResult = () => {
-        const result = attempts.some(a => a.correct) 
-          ? `AnimeKiller ${attempts.length}/6 🔥` 
-          : `AnimeKiller X/6 😭`;
-        const text = `${result}\n${window.location.href}`;
-        
-        if (navigator.share) {
-          navigator.share({ text });
-        } else {
-          navigator.clipboard.writeText(text);
-          alert("Copiado! Pégalo en WhatsApp");
-        }
-      };
-
-      if (!todayAnime) return <div className="min-h-screen flex items-center justify-center">Cargando...</div>;
-
-      return (
-        <div className="min-h-screen flex-col items-center justify-start pt-8 px-4">
-          <h1 className="text-3xl font-bold mb-1 text-purple-400">AnimeKiller</h1>
-          <p className="text-gray-400 mb-4 text-sm">Adivina el anime en 6 intentos</p>
-
-          <div className="w-72 h-72 mb-5 rounded-xl overflow-hidden bg-gray-800 relative">
-            {!imgError ? (
-              <img
-                src={todayAnime.img}
-                style={{ filter: `blur(${blurLevel}px)` }}
-                className="w-full h-full object-cover transition-all duration-700"
-                onError={() => setImgError(true)}
-                alt="Adivina"
-              />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center text-gray-500 text-sm">
-                Imagen no disponible
-              </div>
-            )}
-          </div>
-
-          <p className="text-gray-400 text-sm mb-3">Intentos restantes: {6 - attempts.length}</p>
-
-          <div className="w-full max-w-sm">
-            {attempts.map((att, i) => (
-              <div key={i} className={`p-3 mb-2 rounded-lg text-center font-semibold ${att.correct? 'bg-green-600' : 'bg-red-600/80'}`}>
-                {att.guess}
-              </div>
-            ))}
-          </div>
-
-          {!gameOver && (
-            <div className="flex gap-2 mt-3 w-full max-w-sm">
-              <input
-                value={guess}
-                onChange={(e) => setGuess(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleGuess()}
-                placeholder="Escribe el anime..."
-                className="flex-1 p-3 rounded-lg bg-gray-800 border-gray-700 text-white outline-none focus:border-purple-500"
-              />
-              <button
-                onClick={handleGuess}
-                className="px-5 py-3 bg-purple-600 rounded-lg font-bold hover:bg-purple-700 active:scale-95 transition"
-              >
-                Probar
-              </button>
-            </div>
-          )}
-
-          {gameOver && (
-            <div className="mt-6 text-center">
-              <p className="text-2xl font-bold mb-2">
-                {attempts.some(a => a.correct) ? "¡Correcto!" : "Perdiste"}
-              </p>
-              <p className="text-gray-400 mb-4">Era: <span className="text-white font-bold">{todayAnime.name}</span></p>
-              <button
-                onClick={shareResult}
-                className="px-6 py-3 bg-green-600 rounded-lg font-bold hover:bg-green-700"
-              >
-                Compartir en WhatsApp
-              </button>
-            </div>
-          )}
-        </div>
-      );
+  <style>
+    @keyframes breathe {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
     }
+  </style>
+</head>
+<body class="bg-[#0a0a0f] text-white min-h-screen flex items-center justify-center p-4">
+  <div class="max-w-md w-full text-center">
+    
+    <h1 class="text-3xl font-bold mb-2 text-purple-400">Respira conmigo</h1>
+    <p class="text-gray-400 mb-8">Solo 60 segundos. Estás a salvo aquí.</p>
 
-    ReactDOM.render(<App />, document.getElementById('root'));
+    <div class="mb-8">
+      <div id="breathCircle" class="w-48 h-48 mx-auto rounded-full bg-purple-600/20 flex items-center justify-center">
+        <div class="w-32 h-32 rounded-full bg-purple-600/40 flex items-center justify-center">
+          <span id="breathText" class="text-xl font-semibold">Inicia</span>
+        </div>
+      </div>
+      <button id="startBtn" class="mt-6 px-6 py-3 bg-purple-600 rounded-lg font-bold hover:bg-purple-700">
+        Empezar
+      </button>
+    </div>
+
+    <div id="helpSection" class="hidden">
+      <p class="text-gray-300 mb-4">Si sientes que no puedes más ahora mismo:</p>
+      
+      <div class="space-y-3">
+        <a href="tel:8001230024" class="block w-full p-4 bg-red-600 rounded-lg font-semibold hover:bg-red-700">
+          📞 Línea de Prevención México: 800 123 0024
+        </a>
+        
+        <a href="https://findahelpline.com" target="_blank" class="block w-full p-4 bg-gray-800 rounded-lg hover:bg-gray-700">
+          🌍 Ver líneas de ayuda en tu país
+        </a>
+        
+        <button id="distractBtn" class="w-full p-4 bg-gray-800 rounded-lg hover:bg-gray-700">
+          🎮 Distráeme 5 minutos
+        </button>
+      </div>
+
+      <div id="distractBox" class="hidden mt-4 p-4 bg-gray-800 rounded-lg text-left">
+        <p class="font-semibold mb-2">Nombra 5 cosas que ves ahora mismo.</p>
+        <p class="text-gray-400 text-sm">Suena tonto, pero te trae al presente. Hazlo lento.</p>
+      </div>
+    </div>
+
+    <div class="mt-8 p-4 bg-gray-800/50 rounded-lg">
+      <p class="text-gray-400 italic text-sm">
+        "Pensé que nadie me entendería. Hablar con la línea me dio 10 min para respirar. Hoy llevo 8 meses bien."
+        <br><span class="text-gray-500">- Anónimo</span>
+      </p>
+    </div>
+
+    <p class="text-xs text-gray-600 mt-6">
+      Esta página no reemplaza ayuda profesional. Si estás en peligro inmediato, llama al 911.
+    </p>
+  </div>
+
+  <script>
+    const startBtn = document.getElementById('startBtn');
+    const breathText = document.getElementById('breathText');
+    const breathCircle = document.getElementById('breathCircle');
+    const helpSection = document.getElementById('helpSection');
+    const distractBtn = document.getElementById('distractBtn');
+    const distractBox = document.getElementById('distractBox');
+
+    let running = false;
+
+    startBtn.onclick = () => {
+      if (running) return;
+      running = true;
+      startBtn.style.display = 'none';
+      helpSection.classList.remove('hidden');
+      runBreathing();
+    };
+
+    distractBtn.onclick = () => {
+      distractBox.classList.toggle('hidden');
+    };
+
+    async function runBreathing() {
+      const steps = [
+        { text: "Inhala", time: 4000 },
+        { text: "Mantén", time: 7000 },
+        { text: "Exhala", time: 8000 }
+      ];
+
+      for (let i = 0; i < 3; i++) {
+        for (let step of steps) {
+          breathText.textContent = step.text;
+          breathCircle.style.animation = `breathe ${step.time}ms ease-in-out`;
+          await new Promise(r => setTimeout(r, step.time));
+        }
+      }
+      
+      breathText.textContent = "Listo";
+      breathCircle.style.animation = 'none';
+    }
   </script>
 </body>
 </html>
