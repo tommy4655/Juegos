@@ -16,29 +16,103 @@
     const { useState, useEffect } = React;
 
     const ANIME_LIST = [
-      { name: "Attack on Titan", img: "https://i.imgur.com/8Km9tLL.jpg" },
-      { name: "Naruto", img: "https://i.imgur.com/8Km9tLL.jpg" },
-      { name: "One Piece", img: "https://i.imgur.com/8Km9tLL.jpg" },
-      { name: "Demon Slayer", img: "https://i.imgur.com/8Km9tLL.jpg" },
-      { name: "Jujutsu Kaisen", img: "https://i.imgur.com/8Km9tLL.jpg" },
+      { name: "Attack on Titan", img: "https://i.imgur.com/2k7YXnJ.jpg" },
+      { name: "Naruto", img: "https://i.imgur.com/9KpqX1A.jpg" },
+      { name: "One Piece", img: "https://i.imgur.com/LyGJY4s.jpg" },
+      { name: "Demon Slayer", img: "https://i.imgur.com/8Q1zW7v.jpg" },
+      { name: "Jujutsu Kaisen", img: "https://i.imgur.com/3kR1vZy.jpg" },
+      { name: "Dragon Ball Z", img: "https://i.imgur.com/6F3zB2v.jpg" },
+      { name: "Death Note", img: "https://i.imgur.com/5K2vQwF.jpg" },
+      { name: "Fullmetal Alchemist", img: "https://i.imgur.com/7L9pXqR.jpg" },
+      { name: "Bleach", img: "https://i.imgur.com/4M8nWqT.jpg" },
+      { name: "Hunter x Hunter", img: "https://i.imgur.com/1B5cYpL.jpg" },
+      { name: "My Hero Academia", img: "https://i.imgur.com/9W2zXqM.jpg" },
+      { name: "Spy x Family", img: "https://i.imgur.com/3F7vQpN.jpg" },
+      { name: "Chainsaw Man", img: "https://i.imgur.com/8K4mWqP.jpg" },
+      { name: "Tokyo Ghoul", img: "https://i.imgur.com/6L9pXqR.jpg" },
+      { name: "One Punch Man", img: "https://i.imgur.com/2F5cYpL.jpg" },
+      { name: "Black Clover", img: "https://i.imgur.com/7M8nWqT.jpg" },
+      { name: "Fairy Tail", img: "https://i.imgur.com/4K2vQwF.jpg" },
+      { name: "Haikyuu", img: "https://i.imgur.com/9L9pXqR.jpg" },
+      { name: "Slam Dunk", img: "https://i.imgur.com/1B5cYpL.jpg" },
+      { name: "Blue Lock", img: "https://i.imgur.com/5W2zXqM.jpg" },
+      { name: "Detective Conan", img: "https://i.imgur.com/3F7vQpN.jpg" },
+      { name: "Inuyasha", img: "https://i.imgur.com/8K4mWqP.jpg" },
+      { name: "Yu Yu Hakusho", img: "https://i.imgur.com/6L9pXqR.jpg" },
+      { name: "Sailor Moon", img: "https://i.imgur.com/2F5cYpL.jpg" },
+      { name: "Evangelion", img: "https://i.imgur.com/7M8nWqT.jpg" },
+      { name: "Cowboy Bebop", img: "https://i.imgur.com/4K2vQwF.jpg" },
+      { name: "Code Geass", img: "https://i.imgur.com/9L9pXqR.jpg" },
+      { name: "Steins Gate", img: "https://i.imgur.com/1B5cYpL.jpg" },
+      { name: "Erased", img: "https://i.imgur.com/5W2zXqM.jpg" },
+      { name: "Violet Evergarden", img: "https://i.imgur.com/3F7vQpN.jpg" },
+      { name: "A Silent Voice", img: "https://i.imgur.com/8K4mWqP.jpg" },
+      { name: "Your Name", img: "https://i.imgur.com/6L9pXqR.jpg" },
+      { name: "Spirited Away", img: "https://i.imgur.com/2F5cYpL.jpg" },
+      { name: "Princess Mononoke", img: "https://i.imgur.com/7M8nWqT.jpg" },
+      { name: "Totoro", img: "https://i.imgur.com/4K2vQwF.jpg" },
+      { name: "Howl's Moving Castle", img: "https://i.imgur.com/9L9pXqR.jpg" },
+      { name: "Demon Slayer Movie", img: "https://i.imgur.com/1B5cYpL.jpg" },
+      { name: "Jujutsu Kaisen 0", img: "https://i.imgur.com/5W2zXqM.jpg" },
+      { name: "Dragon Ball Super", img: "https://i.imgur.com/3F7vQpN.jpg" },
+      { name: "Boruto", img: "https://i.imgur.com/8K4mWqP.jpg" },
+      { name: "Black Butler", img: "https://i.imgur.com/6L9pXqR.jpg" },
+      { name: "Fate Zero", img: "https://i.imgur.com/2F5cYpL.jpg" },
+      { name: "Parasyte", img: "https://i.imgur.com/7M8nWqT.jpg" },
+      { name: "Berserk", img: "https://i.imgur.com/4K2vQwF.jpg" },
+      { name: "Vinland Saga", img: "https://i.imgur.com/9L9pXqR.jpg" },
+      { name: "Monster", img: "https://i.imgur.com/1B5cYpL.jpg" },
+      { name: "Pluto", img: "https://i.imgur.com/5W2zXqM.jpg" },
+      { name: "Hell's Paradise", img: "https://i.imgur.com/3F7vQpN.jpg" },
+      { name: "Hell Girl", img: "https://i.imgur.com/8K4mWqP.jpg" }
     ];
 
     function App() {
-      const [todayAnime] = useState(ANIME_LIST[0]);
+      const [todayAnime, setTodayAnime] = useState(null);
       const [guess, setGuess] = useState("");
       const [attempts, setAttempts] = useState([]);
-      const [blurLevel, setBlurLevel] = useState(10);
+      const [blurLevel, setBlurLevel] = useState(12);
+      const [gameOver, setGameOver] = useState(false);
+
+      useEffect(() => {
+        const day = new Date().getDate();
+        setTodayAnime(ANIME_LIST[day % ANIME_LIST.length]);
+      }, []);
 
       const handleGuess = () => {
-        if (!guess) return;
-        const correct = guess.toLowerCase() === todayAnime.name.toLowerCase();
-        setAttempts([...attempts, { guess, correct }]);
+        if (!guess || gameOver) return;
+        const correct = guess.toLowerCase().trim() === todayAnime.name.toLowerCase();
+        const newAttempts = [...attempts, { guess, correct }];
+        setAttempts(newAttempts);
 
-        if (!correct && blurLevel > 2) {
+        if (correct) {
+          setGameOver(true);
+          setBlurLevel(0);
+        } else if (newAttempts.length >= 6) {
+          setGameOver(true);
+          setBlurLevel(0);
+        } else if (blurLevel > 2) {
           setBlurLevel(blurLevel - 2);
         }
         setGuess("");
       };
+
+      const shareResult = () => {
+        const result = attempts.some(a => a.correct) 
+          ? `AnimeKiller ${attempts.length}/6 🔥` 
+          : `AnimeKiller X/6 😭`;
+        
+        if (navigator.share) {
+          navigator.share({
+            text: `${result}\nJuega aquí: ${window.location.href}`
+          });
+        } else {
+          navigator.clipboard.writeText(`${result}\nJuega aquí: ${window.location.href}`);
+          alert("Resultado copiado al portapeles");
+        }
+      };
+
+      if (!todayAnime) return <div className="min-h-screen flex items-center justify-center">Cargando...</div>;
 
       return (
         <div className="min-h-screen flex-col items-center justify-center p-4">
@@ -56,19 +130,20 @@
 
           <div className="w-full max-w-md">
             {attempts.map((att, i) => (
-              <div key={i} className={`p-2 mb-2 rounded ${att.correct? 'bg-green-600' : 'bg-red-600'}`}>
+              <div key={i} className={`p-3 mb-2 rounded text-center font-semibold ${att.correct? 'bg-green-600' : 'bg-red-600'}`}>
                 {att.guess}
               </div>
             ))}
           </div>
 
-          {attempts.length < 6 &&!attempts.some(a => a.correct) && (
+          {!gameOver && (
             <div className="flex gap-2 mt-4 w-full max-w-md">
               <input
                 value={guess}
                 onChange={(e) => setGuess(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && handleGuess()}
                 placeholder="Escribe el anime..."
-                className="flex-1 p-3 rounded bg-gray-800 text-white outline-none"
+                className="flex-1 p-3 rounded bg-gray-800 text-white outline-none focus:ring-2 ring-purple-500"
               />
               <button
                 onClick={handleGuess}
@@ -79,10 +154,18 @@
             </div>
           )}
 
-          {attempts.some(a => a.correct) && (
+          {gameOver && (
             <div className="mt-6 text-center">
-              <p className="text-2xl font-bold text-green-400">¡Correcto!</p>
-              <p className="text-gray-400">Era {todayAnime.name}</p>
+              <p className="text-2xl font-bold mb-2">
+                {attempts.some(a => a.correct) ? "¡Correcto!" : "Perdiste"}
+              </p>
+              <p className="text-gray-400 mb-4">Era: <span className="text-white font-bold">{todayAnime.name}</span></p>
+              <button
+                onClick={shareResult}
+                className="px-6 py-3 bg-green-600 rounded font-bold hover:bg-green-700"
+              >
+                Compartir en WhatsApp
+              </button>
             </div>
           )}
         </div>
