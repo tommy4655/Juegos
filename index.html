@@ -3,107 +3,127 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Respira conmigo</title>
+  <title>No estás solo</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    @keyframes breathe {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.2); }
-    }
-  </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body class="bg-[#0a0a0f] text-white min-h-screen flex items-center justify-center p-4">
-  <div class="max-w-md w-full text-center">
+<body class="bg-[#0a0a0f] text-white min-h-screen p-4">
+  <div class="max-w-2xl mx-auto">
     
-    <h1 class="text-3xl font-bold mb-2 text-purple-400">Respira conmigo</h1>
-    <p class="text-gray-400 mb-8">Solo 60 segundos. Estás a salvo aquí.</p>
+    <h1 class="text-3xl font-bold text-purple-400 mb-2">No estás solo</h1>
+    <p class="text-gray-400 mb-6">Historias anónimas. Lee, comparte, responde.</p>
 
-    <div class="mb-8">
-      <div id="breathCircle" class="w-48 h-48 mx-auto rounded-full bg-purple-600/20 flex items-center justify-center">
-        <div class="w-32 h-32 rounded-full bg-purple-600/40 flex items-center justify-center">
-          <span id="breathText" class="text-xl font-semibold">Inicia</span>
-        </div>
-      </div>
-      <button id="startBtn" class="mt-6 px-6 py-3 bg-purple-600 rounded-lg font-bold hover:bg-purple-700">
-        Empezar
+    <div class="bg-gray-800 p-4 rounded-xl mb-6">
+      <textarea id="storyInput" placeholder="Escribe lo que sientes... es 100% anónimo" 
+        class="w-full bg-gray-900 p-3 rounded-lg text-white outline-none focus:ring-2 ring-purple-500"
+        rows="3"></textarea>
+      <button id="postBtn" class="mt-3 px-5 py-2 bg-purple-600 rounded-lg font-bold hover:bg-purple-700">
+        Publicar
       </button>
+      <p class="text-xs text-gray-500 mt-2">No datos personales. No instrucciones de autolesión.</p>
     </div>
 
-    <div id="helpSection" class="hidden">
-      <p class="text-gray-300 mb-4">Si sientes que no puedes más ahora mismo:</p>
-      
-      <div class="space-y-3">
-        <a href="tel:8001230024" class="block w-full p-4 bg-red-600 rounded-lg font-semibold hover:bg-red-700">
-          📞 Línea de Prevención México: 800 123 0024
-        </a>
-        
-        <a href="https://findahelpline.com" target="_blank" class="block w-full p-4 bg-gray-800 rounded-lg hover:bg-gray-700">
-          🌍 Ver líneas de ayuda en tu país
-        </a>
-        
-        <button id="distractBtn" class="w-full p-4 bg-gray-800 rounded-lg hover:bg-gray-700">
-          🎮 Distráeme 5 minutos
-        </button>
-      </div>
+    <div id="stories" class="space-y-4"></div>
 
-      <div id="distractBox" class="hidden mt-4 p-4 bg-gray-800 rounded-lg text-left">
-        <p class="font-semibold mb-2">Nombra 5 cosas que ves ahora mismo.</p>
-        <p class="text-gray-400 text-sm">Suena tonto, pero te trae al presente. Hazlo lento.</p>
-      </div>
+    <div class="mt-8 p-4 bg-red-900/30 rounded-lg text-sm text-center">
+      <p class="font-bold mb-1">Si estás en peligro:</p>
+      <a href="tel:8001230024" class="text-red-400">México: 800 123 0024</a> | 
+      <a href="https://findahelpline.com" target="_blank" class="text-red-400">Tu país</a>
     </div>
-
-    <div class="mt-8 p-4 bg-gray-800/50 rounded-lg">
-      <p class="text-gray-400 italic text-sm">
-        "Pensé que nadie me entendería. Hablar con la línea me dio 10 min para respirar. Hoy llevo 8 meses bien."
-        <br><span class="text-gray-500">- Anónimo</span>
-      </p>
-    </div>
-
-    <p class="text-xs text-gray-600 mt-6">
-      Esta página no reemplaza ayuda profesional. Si estás en peligro inmediato, llama al 911.
-    </p>
   </div>
 
   <script>
-    const startBtn = document.getElementById('startBtn');
-    const breathText = document.getElementById('breathText');
-    const breathCircle = document.getElementById('breathCircle');
-    const helpSection = document.getElementById('helpSection');
-    const distractBtn = document.getElementById('distractBtn');
-    const distractBox = document.getElementById('distractBox');
+    const supabase = window.supabase.createClient(
+      'https://jopwdvrlaqkdtxtvjopa.supabase.co', 
+      'sb_publishable_S9I7kIntPNDqBQrQCXW4ow_8I3Btu-c'
+    );
+    
+    const bannedWords = ['suicid', 'cortar', 'ahorcar', 'pastillas', 'sobredosis'];
 
-    let running = false;
+    async function loadStories() {
+      const { data, error } = await supabase
+        .from('stories')
+        .select('*, replies(*)')
+        .order('created_at', { ascending: false })
+        .limit(30);
 
-    startBtn.onclick = () => {
-      if (running) return;
-      running = true;
-      startBtn.style.display = 'none';
-      helpSection.classList.remove('hidden');
-      runBreathing();
-    };
+      if (error) {
+        console.error(error);
+        return;
+      }
 
-    distractBtn.onclick = () => {
-      distractBox.classList.toggle('hidden');
-    };
+      const container = document.getElementById('stories');
+      container.innerHTML = '';
+      
+      data.forEach(story => {
+        const div = document.createElement('div');
+        div.className = 'bg-gray-800 p-4 rounded-xl';
+        div.innerHTML = `
+          <p class="mb-3 text-gray-200">${escapeHtml(story.message)}</p>
+          
+          <div class="flex gap-3 items-center mb-3">
+            <button onclick="likeStory(${story.id}, ${story.likes})" 
+              class="text-sm text-gray-400 hover:text-purple-400">
+              ❤️ ${story.likes}
+            </button>
+          </div>
 
-    async function runBreathing() {
-      const steps = [
-        { text: "Inhala", time: 4000 },
-        { text: "Mantén", time: 7000 },
-        { text: "Exhala", time: 8000 }
-      ];
+          <div class="pl-4 border-l-2 border-purple-600/50 space-y-2">
+            ${story.replies.map(r => `<p class="text-sm text-gray-300">${escapeHtml(r.message)}</p>`).join('')}
+          </div>
 
-      for (let i = 0; i < 3; i++) {
-        for (let step of steps) {
-          breathText.textContent = step.text;
-          breathCircle.style.animation = `breathe ${step.time}ms ease-in-out`;
-          await new Promise(r => setTimeout(r, step.time));
-        }
+          <div class="mt-3 flex gap-2">
+            <input placeholder="Responder con apoyo..." 
+              class="flex-1 bg-gray-900 p-2 rounded-lg text-sm outline-none focus:ring-1 ring-purple-500 replyInput" 
+              data-id="${story.id}">
+            <button class="px-3 bg-purple-600 rounded-lg text-sm replyBtn" data-id="${story.id}">
+              Enviar
+            </button>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+      
+      document.querySelectorAll('.replyBtn').forEach(btn => {
+        btn.onclick = () => postReply(btn.dataset.id);
+      });
+    }
+
+    async function postStory() {
+      const msg = document.getElementById('storyInput').value.trim();
+      if (!msg || msg.length < 10) return alert('Escribe un poco más');
+      
+      if (bannedWords.some(w => msg.toLowerCase().includes(w))) {
+        return alert('No podemos publicar eso. Si necesitas ayuda inmediata, llama a tu línea local.');
       }
       
-      breathText.textContent = "Listo";
-      breathCircle.style.animation = 'none';
+      await supabase.from('stories').insert({ message: msg });
+      document.getElementById('storyInput').value = '';
+      loadStories();
     }
+
+    async function postReply(storyId) {
+      const input = document.querySelector(`.replyInput[data-id="${storyId}"]`);
+      const msg = input.value.trim();
+      if (!msg) return;
+      
+      await supabase.from('replies').insert({ story_id: storyId, message: msg });
+      input.value = '';
+      loadStories();
+    }
+
+    async function likeStory(id, currentLikes) {
+      await supabase.from('stories').update({ likes: currentLikes + 1 }).eq('id', id);
+      loadStories();
+    }
+
+    function escapeHtml(text) {
+      return text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    document.getElementById('postBtn').onclick = postStory;
+    loadStories();
+    setInterval(loadStories, 30000);
   </script>
 </body>
 </html>
