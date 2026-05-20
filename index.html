@@ -3,59 +3,38 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AnimeKiller - Adivina el anime</title>
+  <title>AnimeKiller</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
-<body class="bg-gray-900 text-white">
+<body class="bg-[#0f0f13] text-white">
   <div id="root"></div>
 
   <script type="text/babel">
-    const { useState, useEffect } = React;
-
     const ANIME_LIST = [
-      { name: "Attack on Titan", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx16498-9jU7COZ2v0Lo.jpg" },
-      { name: "Naruto", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx20-KJniGdnKbP1q.jpg" },
-      { name: "One Piece", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-PUUmEhGpKHym.jpg" },
-      { name: "Demon Slayer", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx101922-HshLEhzmIpLu.jpg" },
-      { name: "Jujutsu Kaisen", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx113415-9wZxQ9hwWv4N.jpg" },
-      { name: "Dragon Ball Z", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx8133-4qScW9AxKfHn.jpg" },
-      { name: "Death Note", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx1535-ItqlTimd87aR.jpg" },
-      { name: "Fullmetal Alchemist", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx5114-HMspD8BzbHZO.jpg" },
-      { name: "Bleach", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx269-WUy9cSqb4DQX.jpg" },
-      { name: "Hunter x Hunter", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx11061-tGbxh8JURVys.jpg" },
-      { name: "My Hero Academia", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21459-iAoJsIWFS5vC.jpg" },
-      { name: "Spy x Family", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx130003-d1Fb7QKY2IBq.jpg" },
-      { name: "Chainsaw Man", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx127230-8F2gTxokYKTp.jpg" },
-      { name: "Tokyo Ghoul", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx20665-Ym6GhwLEZLtL.jpg" },
-      { name: "One Punch Man", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21087-WIlmRJ3WV3xM.jpg" },
-      { name: "Black Clover", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx100866-HCJtd3YfuOpE.jpg" },
-      { name: "Fairy Tail", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx4224-CGuKoDPAOT4x.jpg" },
-      { name: "Haikyuu", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx20039-xTVHETFBsGFd.jpg" },
-      { name: "Slam Dunk", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx294-HBYdVEf06ANF.jpg" },
-      { name: "Blue Lock", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx137491-GyPDcNjD88XP.jpg" },
-      { name: "Detective Conan", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx201-yHIxgEFWDVZ9.jpg" },
-      { name: "Inuyasha", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx263-6uJSe0duJCOK.jpg" },
-      { name: "Yu Yu Hakusho", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx312-7TFjJJcYQNQc.jpg" },
-      { name: "Sailor Moon", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx264-hD2PwfnYunB3.jpg" },
-      { name: "Evangelion", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx30-ULpTYRWLFtja.jpg" },
-      { name: "Cowboy Bebop", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx1-93aEShIfrJXV.jpg" },
-      { name: "Code Geass", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx1575-0xL7TMUqxvLe.jpg" },
-      { name: "Steins Gate", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx9253-ONrDCHx16nx5.jpg" },
-      { name: "Erased", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21071-PaL1MWp7sDfA.jpg" },
-      { name: "Violet Evergarden", img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx100449-dpNZa3b21UDg.jpg" }
+      { name: "Attack on Titan", img: "https://media.kitsu.io/anime/poster_images/11617/original.jpg" },
+      { name: "Naruto", img: "https://media.kitsu.io/anime/poster_images/11/original.jpg" },
+      { name: "One Piece", img: "https://media.kitsu.io/anime/poster_images/12/original.jpg" },
+      { name: "Demon Slayer", img: "https://media.kitsu.io/anime/poster_images/11670/original.jpg" },
+      { name: "Jujutsu Kaisen", img: "https://media.kitsu.io/anime/poster_images/11748/original.jpg" },
+      { name: "Blue Lock", img: "https://media.kitsu.io/anime/poster_images/13251/original.jpg" },
+      { name: "Death Note", img: "https://media.kitsu.io/anime/poster_images/14/original.jpg" },
+      { name: "Fullmetal Alchemist", img: "https://media.kitsu.io/anime/poster_images/17/original.jpg" },
+      { name: "Spy x Family", img: "https://media.kitsu.io/anime/poster_images/12948/original.jpg" },
+      { name: "Chainsaw Man", img: "https://media.kitsu.io/anime/poster_images/13105/original.jpg" }
     ];
 
     function App() {
-      const [todayAnime, setTodayAnime] = useState(null);
-      const [guess, setGuess] = useState("");
-      const [attempts, setAttempts] = useState([]);
-      const [blurLevel, setBlurLevel] = useState(12);
-      const [gameOver, setGameOver] = useState(false);
+      const [todayAnime, setTodayAnime] = React.useState(null);
+      const [guess, setGuess] = React.useState("");
+      const [attempts, setAttempts] = React.useState([]);
+      const [blurLevel, setBlurLevel] = React.useState(16);
+      const [gameOver, setGameOver] = React.useState(false);
+      const [imgError, setImgError] = React.useState(false);
 
-      useEffect(() => {
+      React.useEffect(() => {
         const day = new Date().getDate();
         setTodayAnime(ANIME_LIST[day % ANIME_LIST.length]);
       }, []);
@@ -72,8 +51,8 @@
         } else if (newAttempts.length >= 6) {
           setGameOver(true);
           setBlurLevel(0);
-        } else if (blurLevel > 2) {
-          setBlurLevel(blurLevel - 2);
+        } else {
+          setBlurLevel(Math.max(4, blurLevel - 3));
         }
         setGuess("");
       };
@@ -82,54 +61,61 @@
         const result = attempts.some(a => a.correct) 
           ? `AnimeKiller ${attempts.length}/6 🔥` 
           : `AnimeKiller X/6 😭`;
-        
-        const text = `${result}\nJuega aquí: ${window.location.href}`;
+        const text = `${result}\n${window.location.href}`;
         
         if (navigator.share) {
           navigator.share({ text });
         } else {
           navigator.clipboard.writeText(text);
-          alert("Resultado copiado. Pégalo en WhatsApp");
+          alert("Copiado! Pégalo en WhatsApp");
         }
       };
 
       if (!todayAnime) return <div className="min-h-screen flex items-center justify-center">Cargando...</div>;
 
       return (
-        <div className="min-h-screen flex-col items-center justify-center p-4">
-          <h1 className="text-4xl font-bold mb-2 text-purple-400">AnimeKiller</h1>
-          <p className="text-gray-400 mb-6">Adivina el anime en 6 intentos</p>
+        <div className="min-h-screen flex-col items-center justify-start pt-8 px-4">
+          <h1 className="text-3xl font-bold mb-1 text-purple-400">AnimeKiller</h1>
+          <p className="text-gray-400 mb-4 text-sm">Adivina el anime en 6 intentos</p>
 
-          <div className="w-64 h-64 mb-6 rounded-lg overflow-hidden bg-gray-800">
-            <img
-              src={todayAnime.img}
-              style={{ filter: `blur(${blurLevel}px)` }}
-              className="w-full h-full object-cover transition-all duration-500"
-              alt="Adivina"
-              onError={(e) => e.target.style.display='none'}
-            />
+          <div className="w-72 h-72 mb-5 rounded-xl overflow-hidden bg-gray-800 relative">
+            {!imgError ? (
+              <img
+                src={todayAnime.img}
+                style={{ filter: `blur(${blurLevel}px)` }}
+                className="w-full h-full object-cover transition-all duration-700"
+                onError={() => setImgError(true)}
+                alt="Adivina"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-gray-500 text-sm">
+                Imagen no disponible
+              </div>
+            )}
           </div>
 
-          <div className="w-full max-w-md">
+          <p className="text-gray-400 text-sm mb-3">Intentos restantes: {6 - attempts.length}</p>
+
+          <div className="w-full max-w-sm">
             {attempts.map((att, i) => (
-              <div key={i} className={`p-3 mb-2 rounded text-center font-semibold ${att.correct? 'bg-green-600' : 'bg-red-600'}`}>
+              <div key={i} className={`p-3 mb-2 rounded-lg text-center font-semibold ${att.correct? 'bg-green-600' : 'bg-red-600/80'}`}>
                 {att.guess}
               </div>
             ))}
           </div>
 
           {!gameOver && (
-            <div className="flex gap-2 mt-4 w-full max-w-md">
+            <div className="flex gap-2 mt-3 w-full max-w-sm">
               <input
                 value={guess}
                 onChange={(e) => setGuess(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && handleGuess()}
                 placeholder="Escribe el anime..."
-                className="flex-1 p-3 rounded bg-gray-800 text-white outline-none focus:ring-2 ring-purple-500"
+                className="flex-1 p-3 rounded-lg bg-gray-800 border-gray-700 text-white outline-none focus:border-purple-500"
               />
               <button
                 onClick={handleGuess}
-                className="px-6 py-3 bg-purple-600 rounded font-bold hover:bg-purple-700"
+                className="px-5 py-3 bg-purple-600 rounded-lg font-bold hover:bg-purple-700 active:scale-95 transition"
               >
                 Probar
               </button>
@@ -144,7 +130,7 @@
               <p className="text-gray-400 mb-4">Era: <span className="text-white font-bold">{todayAnime.name}</span></p>
               <button
                 onClick={shareResult}
-                className="px-6 py-3 bg-green-600 rounded font-bold hover:bg-green-700"
+                className="px-6 py-3 bg-green-600 rounded-lg font-bold hover:bg-green-700"
               >
                 Compartir en WhatsApp
               </button>
